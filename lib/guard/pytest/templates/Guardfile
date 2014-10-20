@@ -1,0 +1,7 @@
+# Add files and commands to this file, like the example:
+#   watch(%r{file/path}) { target test file/path }
+#
+guard :pytest, tb: 'line', q: true do
+  watch(%r{^((?!test/).*)\.py$})  {|m| "test/#{m[1]}_test.py" }
+  watch(%r{^test/.*_test\.py$})
+end
