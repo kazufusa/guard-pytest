@@ -1,28 +1,29 @@
-require 'guard'
-require 'guard/guard'
+require 'guard/compat/plugin'
+require 'guard/pytest/version'
 
 module Guard
-  class Pytest < Guard
-    def initialize(watchers = [], options = {})
-      @option = options.map do |k, v|
-        if v == true
-          "#{'-'*(k.length>1? 2: 1) }#{k}" 
-        elsif v.is_a? String
-          "#{'-'*(k.length>1? 2: 1) }#{k}=#{v}"
-        end
-      end.join ' '
-
+  class Pytest < Plugin
+    def initialize(options = {})
       super
     end
 
-    def run_all
-      system "py.test #{@option}"
+    def start
     end
 
-    def run_on_change(paths)
-      grouped_paths = paths.group_by{|path| File.exist? path}
+    def stop
+    end
 
-      system "py.test #{@option} #{grouped_paths[true].join ' '}" if grouped_paths[true]
+    def reload
+    end
+
+    def run_all
+      $stdout.puts `py.test #{options[:pytest_option]}`
+      true
+    end
+
+    def run_on_modifications(paths)
+      $stdout.puts `py.test #{options[:pytest_option]} #{paths.join ' '}`
+      true
     end
 
   end

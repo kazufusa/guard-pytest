@@ -1,22 +1,30 @@
 # coding: utf-8
-$:.push File.expand_path('../lib', __FILE__)
+lib = File.expand_path('../lib', __FILE__)
+$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'guard/pytest/version'
 
-Gem::Specification.new do |s|
-  s.name          = "guard-pytest"
-  s.version       = Guard::Pytest::VERSION
-  s.authors       = ["kazufusa"]
-  s.email         = ["kazu.jiyuunosenshi.fusa@gmail.com"]
-  s.homepage      = "https://github.com/kazufusa/guard-pytest"
-  s.summary       = 'Guard gem for Pytest'
-  s.description   = <<-DESC
+Gem::Specification.new do |spec|
+  spec.name          = "guard-pytest"
+  spec.version       = Guard::PytestVersion::VERSION
+  spec.authors       = ["kazufusa"]
+  spec.email         = ["kazu.jiyuunosenshi.fusa@gmail.com"]
+
+  spec.summary       = 'Guard gem for Pytest'
+  spec.description   = <<-DESC
     Guard::Pytest automatically runs Pytest when watched files are modified.
   DESC
-  s.license       = "MIT"
+  spec.homepage      = "https://github.com/kazufusa/guard-pytest"
+  spec.license       = "MIT"
 
-  s.files         = `git ls-files -z`.split("\x0")
-  s.require_paths = ["lib"]
+  spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
+  spec.bindir        = "exe"
+  spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
+  spec.require_paths = ["lib"]
 
-  s.add_dependency 'guard', '>= 1.1.0'
-  s.add_development_dependency "bundler", "~> 1.6"
+  spec.add_dependency 'guard', '~> 2.12'
+  spec.add_dependency 'guard-compat', '~> 1.2'
+
+  spec.add_development_dependency "bundler", "~> 1.10"
+  spec.add_development_dependency "rake", "~> 10.0"
+  spec.add_development_dependency 'rspec', "~> 3.0"
 end

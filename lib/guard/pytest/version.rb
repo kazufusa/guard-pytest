@@ -1,5 +1,5 @@
 module Guard
-  module Pytest
-    VERSION = "0.0.1"
+  class PytestVersion
+    VERSION = "0.1.0"
   end
 end
