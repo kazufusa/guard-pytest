@@ -1,4 +1,7 @@
 # Guard::Pytest
+[![Gem Version](https://badge.fury.io/rb/guard-pytest.svg)](http://badge.fury.io/rb/guard-pytest)
+[![Build Status](https://secure.travis-ci.org/kazufusa/guard-pytest.png?branch=master)](http://travis-ci.org/kazufusa/guard-pytest)
+[![Dependency Status](https://gemnasium.com/kazufusa/guard-pytest.svg)](https://gemnasium.com/kazufusa/guard-pytest)
 
 Guard for [Pytest](http://pytest.org/latest/).
 
