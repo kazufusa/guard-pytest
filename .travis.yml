@@ -1,0 +1,10 @@
+language: ruby
+rvm:
+  - 2.2.2
+before_install:
+  - sudo pip install -r requirements.txt
+  - gem install bundler -v 1.10.5
+script:
+  - bundle exec rspec
+  - bundle exec guard init
+  - gem build guard-pytest.gemspec
