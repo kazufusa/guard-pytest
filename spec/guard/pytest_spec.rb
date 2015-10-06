@@ -19,20 +19,50 @@ RSpec.describe Guard::Pytest do
 
   describe "#run_all" do
     it "works with all tests" do
-      expect($stdout).to receive(:puts).with(include? "#{failure_test} F\n#{success_test} .")
+      expect(subject).to receive(:system).with("py.test", "--doctest-modules").and_return(true)
       subject.run_all
     end
   end
 
   describe "#run_on_modifications" do
-    it "works with success test" do
-      expect($stdout).to receive(:puts).with(include? "#{success_test} .")
-      subject.run_on_modifications([success_test])
+    context "with a success test" do
+      it "works" do
+        expect(subject).to receive(:system).with("py.test", "--doctest-modules", success_test).and_return(true)
+        subject.run_on_modifications([success_test])
+      end
     end
 
-    it "works with failure test" do
-      expect($stdout).to receive(:puts).with(include? "#{failure_test} F")
-      subject.run_on_modifications([failure_test])
+    context "with a failure test" do
+      before do
+        allow(subject).to receive(:system).with("py.test", "--doctest-modules", failure_test).and_return(false)
+      end
+
+      it "throws :task_has_failed" do
+        expect(subject).to receive(:throw).with(:task_has_failed)
+        subject.run_on_modifications([failure_test])
+      end
+    end
+
+    context "when py.test is not installed" do
+      before do
+        allow(subject).to receive(:system).with("py.test", "--doctest-modules", success_test).and_return(nil)
+      end
+      it "throws :task_has_failed" do
+        expect(subject).to receive(:throw).with(:task_has_failed)
+        subject.run_on_modifications([success_test])
+      end
+    end
+  end
+
+  describe "shell expansion" do
+    context "when options contain shell words" do
+      subject { Guard::Pytest.new({pytest_option: "-x --ignore='foo bar' -q"}) }
+
+      it "correctly splits the options" do
+        expected_args = ["py.test", "-x", "--ignore=foo bar", "-q", 'foo']
+        expect(subject).to receive(:system).with(*expected_args).and_return(true)
+        subject.run_on_modifications(['foo'])
+      end
     end
   end
 end
