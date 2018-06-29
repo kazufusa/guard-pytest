@@ -30,6 +30,15 @@ guard :pytest, pytest_option: "--doctest-modules --color=yes" do
 end
 ```
 
+specify custom pytest command
+```ruby
+guard :pytest, pytest_cmd: "pipenv run py.test", pytest_option: "--doctest-modules --color=yes" do
+  watch(%r{^((?!test/).*)\.py$})  {|m| "test/#{m[1]}_test.py" }
+  watch(%r{^test/.*_test\.py$})
+end
+```
+
+
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/kazufusa/guard-pytest. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](contributor-covenant.org) code of conduct.
