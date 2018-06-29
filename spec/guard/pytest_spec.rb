@@ -57,10 +57,10 @@ RSpec.describe Guard::Pytest do
       let(:custom_pytest) { "pipenv run py.test" }
       subject { Guard::Pytest.new({pytest_option: "--doctest-modules", pytest_cmd: custom_pytest}) }
       before do
-        allow(subject).to receive(:system).with(custom_pytest , "--doctest-modules", success_test).and_return(true)
+        allow(subject).to receive(:system).with("pipenv", "run", "py.test", "--doctest-modules", success_test).and_return(true)
       end
       it "works" do
-        expect(subject).to receive(:system).with(custom_pytest, "--doctest-modules", success_test).and_return(true)
+        expect(subject).to receive(:system).with("pipenv", "run", "py.test", "--doctest-modules", success_test).and_return(true)
         subject.run_on_modifications([success_test])
       end
     end
