@@ -25,15 +25,16 @@ module Guard
     end
 
     def run_on_modifications(paths)
+      pytest_cmd = options[:pytest_cmd] || "py.test"
       opts = Shellwords.shellsplit(options[:pytest_option])
-      run_tests(opts, paths)
+      run_tests(pytest_cmd, opts, paths)
       true
     end
 
     private
 
-    def run_tests(options, files = nil)
-      result = system("py.test", *options, *files)
+    def run_tests(pytest_cmd, options, files = nil)
+      result = system(pytest_cmd, *options, *files)
       throw(:task_has_failed) unless result
     end
   end
