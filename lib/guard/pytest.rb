@@ -32,8 +32,13 @@ module Guard
 
     private
 
+    def pytest_cmd
+      pytest_cmd = options[:pytest_cmd] || "py.test"
+      pytest_cmd.split(" ")
+    end
+
     def run_tests(options, files = nil)
-      result = system("py.test", *options, *files)
+      result = system(*pytest_cmd, *options, *files)
       throw(:task_has_failed) unless result
     end
   end
